@@ -199,6 +199,12 @@ def main():
     print("時間計測開始\n")
     start = time.time()
     # 学習データを学習データとバリデーションデータに分割 (バリデーションセットを20%とした例)
+    X_train, X_validation, Y_train, Y_validation = train_test_split(
+        X_train,
+        Y_train,
+        test_size=0.2,
+    )
+    # さらに生成した80%の学習データを、各モデルの学習データとバリデーションデータに分割（バリデーションデータを20%とした）
     # モデル1用
     X_train1, X_validation1, Y_train1, Y_validation1 = train_test_split(
         X_train,
@@ -222,9 +228,9 @@ def main():
     )
 
     # モデルの構築
-    model1 = my_MLP(input_shape=X_train.shape[1], output_dim=10)
-    model2 = my_MLP(input_shape=X_train.shape[1], output_dim=10)
-    model3 = my_MLP(input_shape=X_train.shape[1], output_dim=10)
+    model1 = my_MLP(input_shape=X_train1.shape[1], output_dim=10)
+    model2 = my_MLP(input_shape=X_train2.shape[1], output_dim=10)
+    model3 = my_MLP(input_shape=X_train3.shape[1], output_dim=10)
 
     # モデルの学習基準の設定
     model1.compile(
@@ -264,12 +270,7 @@ def main():
     ############################################################################
     # バリデーションセットに対する予測
     # 学習データを学習データとバリデーションデータに分割 (バリデーションセットを20%とした例)
-    # 各モデルの学習データとバリデーションデータは異なるので、再びデータを生成する
-    X_train, X_validation, Y_train, Y_validation = train_test_split(
-        X_train,
-        Y_train,
-        test_size=0.2,
-    )
+   
     # モデル1
     predict1 = model1.predict(X_validation)
     predicted_values1 = np.argmax(predict1, axis=1)
@@ -295,13 +296,13 @@ def main():
 
     ############################################################################
     # テストデータに対する予測
-    # モデル1
+    # モデル1の予測
     predict1 = model1.predict(X_test)
     predicted_values1 = np.argmax(predict1, axis=1)
-    # モデル2
+    # モデル2の予測
     predict2 = model2.predict(X_test)
     predicted_values2 = np.argmax(predict2, axis=1)
-    # モデル3
+    # モデル3の予測
     predict3 = model3.predict(X_test)
     predicted_values3 = np.argmax(predict3, axis=1)
 
